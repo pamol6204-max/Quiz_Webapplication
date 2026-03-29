@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's start quiz app</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header>
+        <div id="quiz-app-header">
+            <div>
+                <img src="assets/images/techpaathshala-logo.svg" alt="techpaathshsla-logo">
+            </div>
+            <div id="header-list">
+                <ul>
+                    <li>Hello</li>
+                    <li id="show-user-name"></li>
+                </ul>
+                <img src="assets/images/header-image.svg" alt="image" onclick="UsersLogOut()">
+            </div>
+        </div>
+        <div id="logout-container">
+            <div>
+                <i class="fa-solid fa-sort-up"></i>
+                <p id="logedinuser-firstname"></p>
+                <p id="current-user-name"></p>
+                <p id="current-user-email"></p>
+                <button type="button" id="logOut-btn" onclick="logOut()">Log out</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section id="disclaimer-section">
+            <div id="disclaimers">
+                <h2>
+                    Let's Start the Quiz
+                </h2>
+                <p><img src="assets/images/clock-icon.svg" alt="clock icon">10 min</p>
+                <ul>
+                    <li>Disclaimers</li>
+                    <li>Disclaimers</li>
+                </ul>
+            </div>
+            <div id="catchy-box">
+                <div>
+                    <img src="assets/images/catchy-box.svg" alt="">
+                </div>
+                <h2>Starting Quiz</h2>
+                <p>when you're done, review your answers and See</p>
+                <p id="for-padding"> your rank</p>
+                <form id="quiz-starting-form">
+                    <div>
+                        <div><label for="email-id"> Full Name<span>*</span></label></div>
+                        <input type="text" id="email-id" name="email-id" placeholder="Full name">
+                    </div>
+                    <div>
+                        <div><label for="email-id"> Email ID<span>*</span></label></div>
+                        <input type="text" id="email-id" name="email-id" placeholder="xyz@gmail.com">
+                    </div>
+                    <div>
+                        <div><label for="password">Conatct No<span>*</span></label></div>
+                        <input type="text" id="text" name="text" placeholder="Contact No">
+                    </div>
+                </form> 
+                <div id="start-quiz-btn">
+                    <button type="button" id="start-quize" onclick="startQuize()">Start Quiz</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="assets/script.js"></script>
+    <script>
+        userName();
+        LoggedInUserFirstLetter()
+    </script>
+
+</body>
+
+</html>

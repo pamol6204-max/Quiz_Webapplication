@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <section id="login-page">
+        <div class="login-image">
+            <img src="assets/images/signup-image.svg" alt="brain image">
+        </div>
+        <div class="login-form">
+            <h2>Sign Up</h2>
+            <p>Please Enter Your Details below</p>
+            <div>
+                <div class="input-name"><label for="full-name"> Full Name<span>*</span></label></div>
+                <input type="text" id="full-name" name="full-name" placeholder="Full Name" autocomplete="on" required>
+            </div>
+            <div>
+                <div class="input-name"><label for="email-id"> Email ID<span>*</span></label></div>
+                <input type="text" id="email-id" name="email" placeholder="xyz@gmail.com" autocomplete="on" required>
+            </div>
+            <div>
+                <div class="input-name"><label for="password">Password<span>*</span></label></div>
+                <input type="password" id="password" name="pass" placeholder="password" autocomplete="on">
+                <img src="assets/images/eye-open-pass.png" alt="password eye icon" id="show-pass" onclick="passwordHideShow()">
+                <img src="assets/images/eye-close-pass.png" alt="password eye icon" id="hide-pass" onclick="passwordHideShow()">
+            </div>
+            <div id="login-btn">
+                <button type="button" onclick="registration()">SignUp</button>
+            </div>
+            <div id="login-with-google">
+               <button type="button"> <img src="assets/images/google-icon.png" alt="google icon">Sign up with Google</button>
+            </div>
+            <!--<div id="checkbox">
+                 <p> <input type="checkbox"> I accept <a href="#">Term & Condition</a></p>
+            </div>-->
+            <p class="create-account"> have an account? <a href="index.html">Log in?</a></p>
+        </div>
+    </section>
+    <script src="assets/script.js"></script>
+</body>
+</html>

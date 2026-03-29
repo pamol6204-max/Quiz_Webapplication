@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score Board</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header>
+        <div id="quiz-app-header">
+            <div>
+                <img src="assets/images/techpaathshala-logo.svg" alt="techpaathshala-logo">
+            </div>
+            <div id="header-list">
+                <ul>
+                    <li>Hello</li>
+                    <li id="show-user-name"></li>
+                </ul>
+                <img src="assets/images/header-image.svg" alt="image" onclick="UsersLogOut()">
+            </div>
+        </div>
+        <div id="logout-container" class="logout-container">
+            <div>
+            <i class="fa-solid fa-sort-up"></i>
+                <p id="logedinuser-firstname"></p>
+                <p id="current-user-name"></p>
+                <p id="current-user-email"></p>
+                <button type="button" id="logOut-btn" onclick="logOut()">Log out</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section id="score-card-section">
+            <div id="heading">
+                <h2>Wow You Rank  <span id="user-position">1st</span></h2>
+                <!--<p>Supporting Text </p>-->
+            </div>
+            <div id="top-3-winners">
+                <div class="winners-img1">
+                    <h3 id="user-1">#2</h3>
+                    <img src="" alt="">
+                    <p id="name2">name</p>
+                    <span id="score-number1">0</span>
+                </div>
+               <img src="assets/images/winner-king.svg" alt="" id="no1">    
+                <div class="winners-img2">
+                    <img src="" alt="">
+                    <p id="name1">name</p>
+                    <span id="score-number2">0</span>
+                </div>
+                <div class="winners-img3">
+                    <h3 id="user-3">#3</h3>
+                    <img src="" alt="">
+                    <p id="name3">name</p>
+                    <span id="score-number3">0</span>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div id="bottom-score-card">
+        <img src="assets/images/bottom-score-card.png" alt="">
+    <div id="bottom-score-name">
+    <div class="score-cards-names">
+        <div>
+            <h3>#4</h3>
+            <p id="name4">name</p>
+        </div>    
+        <div>
+            <h3 id="score-number4">0</h3>
+        </div>
+    </div>
+    <div class="score-cards-names">
+
+        <div>
+            <h3>#5</h3>
+            <p id="name5">name</p>
+        </div>    
+        <div>
+            <h3 id="score-number5">0</h3>
+        </div>
+    </div>
+    <div class="score-cards-names">
+        <div>
+            <h3>#<span id="user-position-with-name">6</span></h3>
+            <p id="name6">name</p>
+        </div>    
+        <div>
+            <h3 id="score-number6">0</h3>
+        </div>
+    </div>
+</div>
+</div>
+<script src="assets/script.js"></script>
+<script>
+    displayScores()
+    userPosition()
+    userIsNotRankSixPosition()
+    userName()
+    LoggedInUserFirstLetter()
+</script>
+</body>
+
+</html>

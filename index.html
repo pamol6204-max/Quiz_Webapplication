@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- In your main quiz HTML -->
+    <a href="admin.html" style="position: fixed; bottom: 20px; right: 20px; background: #667eea; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
+    Admin Panel
+    </a>
+</head>
+
+<body>
+    <section id="login-page">
+        <div class="login-image">
+            <img src="assets/images/quiz-image.svg" alt="brain image">
+        </div>
+        <div class="login-form">
+            <h2>Login</h2>
+            <p>Please Enter Your Details below</p>
+            <div>
+                <div class="input-name"><label for="email-id"> Email ID<span>*</span></label></div>
+                <input type="text" id="email-id" name="email-id" placeholder="xyz@gmail.com" >
+            </div>
+            <div>
+                <div class="input-name"><label for="password">Password<span>*</span></label></div>
+                <input type="password" id="password" name="password" placeholder="password" >
+                <img src="assets/images/eye-open-pass.png" alt="password eye icon" id="show-pass" onclick="passwordHideShow()">
+                <img src="assets/images/eye-close-pass.png" alt="password eye icon" id="hide-pass" onclick="passwordHideShow()">
+            </div>
+            <div id="login-btn">
+                <button type="button" onclick="validation()">Login</button>
+            </div>
+            <div id="login-with-google">
+                <button type="button"> <img src="assets/images/google-icon.png" alt="google icon">Sign up with Google</button>
+            </div>
+
+            <p class="create-account"> Don't have an account? <a href="signup.html">Sign up?</a></p>
+        </div>
+    </section>
+    
+    <script src="assets/script.js"></script>
+</body>
+
+</html>

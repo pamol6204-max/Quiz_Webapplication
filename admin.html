@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel – Quiz App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ─── Reset & Variables ─────────────────────────────── */
+        *, *::before, *::after { margin: 0; box-sizing: border-box; }
+
+        :root {
+            --gold:      #F3BD00;
+            --gold-dim:  #ffd54f22;
+            --dark:      #12111A;
+            --sidebar:   #1C1B27;
+            --card:      #242333;
+            --border:    #2e2d3e;
+            --text:      #e8e6f0;
+            --muted:     #7c7a96;
+            --green:     #3ddc97;
+            --red:       #ff5c6c;
+            --blue:      #57b9ff;
+            --sidebar-w: 220px;
+            --header-h:  64px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, .brand-name {
+            font-family: 'Syne', sans-serif;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* ─── Header ─────────────────────────────────────────── */
+        #admin-header {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: var(--header-h);
+            background: var(--sidebar);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px 0 0;
+            z-index: 100;
+        }
+
+        .header-brand {
+            width: var(--sidebar-w);
+            display: flex; align-items: center; gap: 12px;
+            padding: 0 24px;
+        }
+
+        .brand-logo {
+            width: 36px; height: 36px;
+            background: var(--gold);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800; font-size: 18px; color: #12111A;
+        }
+
+        .brand-name {
+            font-size: 16px; font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text);
+        }
+
+        .header-right {
+            display: flex; align-items: center; gap: 20px;
+        }
+
+        .header-badge {
+            background: var(--gold-dim);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .admin-avatar {
+            width: 36px; height: 36px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700; font-size: 15px; color: #12111A;
+            cursor: pointer; position: relative;
+        }
+
+        /* ─── Sidebar ────────────────────────────────────────── */
+        #sidebar {
+            position: fixed;
+            top: var(--header-h); left: 0;
+            width: var(--sidebar-w);
+            height: calc(100vh - var(--header-h));
+            background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            z-index: 90;
+            display: flex; flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 10px; letter-spacing: 2px;
+            color: var(--muted); font-weight: 600;
+            padding: 0 24px 10px;
+            text-transform: uppercase;
+        }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 11px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            color: var(--muted);
+            font-size: 14px; font-weight: 500;
+        }
+
+        .nav-item i { width: 18px; font-size: 15px; }
+
+        .nav-item:hover {
+            background: rgba(243,189,0,0.07);
+            color: var(--text);
+        }
+
+        .nav-item.active {
+            background: rgba(243,189,0,0.1);
+            border-left-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .nav-divider {
+            height: 1px; background: var(--border);
+            margin: 12px 24px;
+        }
+
+        .nav-bottom {
+            margin-top: auto;
+            padding: 0 0 8px;
+        }
+
+        /* ─── Main Content ────────────────────────────────────── */
+        #main {
+            margin-left: var(--sidebar-w);
+            margin-top: var(--header-h);
+            padding: 28px;
+            min-height: calc(100vh - var(--header-h));
+        }
+
+        /* ─── Pages (sections) ───────────────────────────────── */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ─── Page Header ─────────────────────────────────────── */
+        .page-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .page-title { font-size: 26px; font-weight: 700; }
+        .page-subtitle { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+        /* ─── Stat Cards ──────────────────────────────────────── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px 24px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 3px;
+        }
+
+        .stat-card.gold::before   { background: var(--gold); }
+        .stat-card.green::before  { background: var(--green); }
+        .stat-card.blue::before   { background: var(--blue); }
+        .stat-card.red::before    { background: var(--red); }
+
+        .stat-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; margin-bottom: 14px;
+        }
+
+        .stat-icon.gold  { background: rgba(243,189,0,0.15);  color: var(--gold); }
+        .stat-icon.green { background: rgba(61,220,151,0.15); color: var(--green); }
+        .stat-icon.blue  { background: rgba(87,185,255,0.15); color: var(--blue); }
+        .stat-icon.red   { background: rgba(255,92,108,0.15); color: var(--red); }
+
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 32px; font-weight: 800;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 12px; color: var(--muted);
+            margin-top: 6px; letter-spacing: 0.5px;
+        }
+
+        /* ─── Table Card ──────────────────────────────────────── */
+        .table-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .table-card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px; font-weight: 700;
+        }
+
+        .table-search {
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .search-input {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            color: var(--text);
+            font-size: 13px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            width: 220px;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus { border-color: var(--gold); }
+        .search-input::placeholder { color: var(--muted); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead { background: rgba(255,255,255,0.03); }
+
+        thead th {
+            padding: 13px 20px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        tbody tr:last-child { border-bottom: none; }
+
+        tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+        tbody td {
+            padding: 14px 20px;
+            font-size: 14px;
+            color: var(--text);
+            vertical-align: middle;
+        }
+
+        /* ─── Buttons ─────────────────────────────────────────── */
+        .btn {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 9px 18px;
+            border-radius: 8px;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px; font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--dark);
+        }
+        .btn-primary:hover { background: #ffd54f; transform: translateY(-1px); }
+
+        .btn-danger  { background: rgba(255,92,108,0.15); color: var(--red); border: 1px solid rgba(255,92,108,0.3); }
+        .btn-danger:hover  { background: var(--red); color: #fff; }
+
+        .btn-success { background: rgba(61,220,151,0.15); color: var(--green); border: 1px solid rgba(61,220,151,0.3); }
+        .btn-success:hover { background: var(--green); color: var(--dark); }
+
+        .btn-info    { background: rgba(87,185,255,0.15); color: var(--blue); border: 1px solid rgba(87,185,255,0.3); }
+        .btn-info:hover    { background: var(--blue); color: #fff; }
+
+        .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 6px; }
+
+        .action-btns { display: flex; gap: 6px; }
+
+        /* ─── Avatar Chip ─────────────────────────────────────── */
+        .user-chip {
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .chip-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700; font-size: 13px;
+            color: var(--dark);
+            flex-shrink: 0;
+        }
+
+        .chip-name { font-weight: 600; font-size: 14px; }
+        .chip-email { font-size: 12px; color: var(--muted); }
+
+        /* ─── Badge ───────────────────────────────────────────── */
+        .badge {
+            display: inline-flex; align-items: center;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 600;
+        }
+
+        .badge-gold   { background: rgba(243,189,0,0.15);  color: var(--gold); }
+        .badge-green  { background: rgba(61,220,151,0.15); color: var(--green); }
+        .badge-red    { background: rgba(255,92,108,0.15); color: var(--red); }
+        .badge-muted  { background: rgba(124,122,150,0.15); color: var(--muted); }
+
+        /* ─── Modal Overlay ───────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            align-items: center; justify-content: center;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            width: 560px;
+            max-width: 95vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.2s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to   { opacity: 1; transform: scale(1)    translateY(0); }
+        }
+
+        .modal-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .modal-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px; font-weight: 700;
+        }
+
+        .modal-close {
+            width: 30px; height: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: none;
+            color: var(--muted);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+        /* ─── Form ────────────────────────────────────────────── */
+        .form-group { margin-bottom: 18px; }
+
+        .form-label {
+            display: block;
+            font-size: 13px; font-weight: 600;
+            margin-bottom: 8px; color: var(--muted);
+            letter-spacing: 0.5px;
+        }
+
+        .form-label span { color: var(--red); }
+
+        .form-control {
+            width: 100%;
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus { border-color: var(--gold); }
+        .form-control::placeholder { color: var(--muted); }
+
+        textarea.form-control { resize: vertical; min-height: 80px; }
+
+        select.form-control option { background: var(--card); }
+
+        .options-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-footer {
+            display: flex; justify-content: flex-end; gap: 10px;
+            margin-top: 24px; padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ─── Confirm Modal ───────────────────────────────────── */
+        #confirm-modal .modal {
+            width: 380px; text-align: center;
+            padding: 36px 28px;
+        }
+
+        .confirm-icon {
+            width: 60px; height: 60px;
+            background: rgba(255,92,108,0.15);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; color: var(--red);
+            margin: 0 auto 18px;
+        }
+
+        .confirm-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .confirm-text  { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+
+        .confirm-btns { display: flex; justify-content: center; gap: 12px; }
+
+        /* ─── View Modal ──────────────────────────────────────── */
+        .view-row {
+            display: flex; gap: 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .view-row:last-child { border-bottom: none; }
+
+        .view-label {
+            width: 140px; flex-shrink: 0;
+            padding: 12px 16px;
+            font-size: 12px; font-weight: 600;
+            color: var(--muted); letter-spacing: 0.5px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .view-value {
+            padding: 12px 16px;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        .view-table-wrap {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 2px;
+        }
+
+        /* ─── Leaderboard Podium ──────────────────────────────── */
+        .podium {
+            display: flex; align-items: flex-end;
+            justify-content: center; gap: 16px;
+            margin-bottom: 28px;
+            padding: 24px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .podium-item { text-align: center; }
+
+        .podium-block {
+            border-radius: 8px 8px 0 0;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 22px; font-weight: 800;
+        }
+
+        .podium-item:nth-child(1) .podium-block { width: 90px; height: 80px;  background: rgba(124,122,150,0.3); }
+        .podium-item:nth-child(2) .podium-block { width: 90px; height: 110px; background: rgba(243,189,0,0.2); color: var(--gold); }
+        .podium-item:nth-child(3) .podium-block { width: 90px; height: 60px;  background: rgba(61,220,151,0.1); }
+
+        .podium-name { font-size: 13px; font-weight: 600; margin-top: 10px; }
+        .podium-score { font-size: 12px; color: var(--muted); }
+        .podium-rank  { font-size: 18px; margin-bottom: 6px; }
+
+        /* ─── Empty State ─────────────────────────────────────── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .empty-state i { font-size: 40px; margin-bottom: 14px; display: block; }
+        .empty-state p { font-size: 15px; }
+
+        /* ─── Toast ───────────────────────────────────────────── */
+        #toast {
+            position: fixed; bottom: 28px; right: 28px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 20px;
+            display: flex; align-items: center; gap: 12px;
+            font-size: 14px;
+            z-index: 300;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 320px;
+        }
+
+        #toast.show { transform: translateY(0); opacity: 1; }
+        #toast.success .toast-icon { color: var(--green); }
+        #toast.error   .toast-icon { color: var(--red); }
+        #toast.info    .toast-icon { color: var(--blue); }
+
+        /* ─── Scrollbar ───────────────────────────────────────── */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--dark); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+        /* ─── Responsive ──────────────────────────────────────── */
+        @media (max-width: 768px) {
+            :root { --sidebar-w: 0px; }
+            #sidebar { transform: translateX(-220px); width: 220px; transition: transform 0.3s; }
+            #sidebar.open { transform: translateX(0); --sidebar-w: 220px; }
+            #main { margin-left: 0; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .options-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ─── Test Details ────────────────────────────────────── */
+        .test-answer { 
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 10px; border-radius: 6px;
+            font-size: 13px; font-weight: 500;
+        }
+        .test-answer.correct { background: rgba(61,220,151,0.15); color: var(--green); }
+        .test-answer.wrong   { background: rgba(255,92,108,0.15);  color: var(--red); }
+
+        .score-bar-wrap { 
+            width: 100%; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+        }
+        .score-bar { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.8s ease; }
+
+        .rank-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; border-radius: 50%;
+            font-size: 12px; font-weight: 700;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .rank-1 { background: rgba(243,189,0,0.2); color: var(--gold); }
+        .rank-2 { background: rgba(124,122,150,0.2); color: #c0c0d0; }
+        .rank-3 { background: rgba(61,220,151,0.15); color: var(--green); }
+        .rank-n { background: var(--border); color: var(--muted); }
+    </style>
+</head>
+<body>
+
+<!-- ─── Header ──────────────────────────────────────────────────── -->
+<header id="admin-header">
+    <div class="header-brand">
+        <div class="brand-logo">Q</div>
+        <span class="brand-name">QuizAdmin</span>
+    </div>
+    <div class="header-right">
+        <span class="header-badge">ADMIN</span>
+        <div class="admin-avatar" id="adminAvatarBtn">A</div>
+    </div>
+</header>
+
+<!-- ─── Sidebar ─────────────────────────────────────────────────── -->
+<nav id="sidebar">
+    <div>
+        <div class="nav-section-label">Overview</div>
+        <div class="nav-item active" onclick="showPage('dashboard')">
+            <i class="fa-solid fa-gauge-high"></i> Dashboard
+        </div>
+    </div>
+
+    <div class="nav-divider"></div>
+
+    <div>
+        <div class="nav-section-label">Manage</div>
+        <div class="nav-item" onclick="showPage('questions')">
+            <i class="fa-solid fa-circle-question"></i> Questions
+        </div>
+        <div class="nav-item" onclick="showPage('users')">
+            <i class="fa-solid fa-users"></i> Users
+        </div>
+        <div class="nav-item" onclick="showPage('results')">
+            <i class="fa-solid fa-chart-bar"></i> Results
+        </div>
+        <div class="nav-item" onclick="showPage('leaderboard')">
+            <i class="fa-solid fa-trophy"></i> Leaderboard
+        </div>
+    </div>
+
+    <div class="nav-divider"></div>
+
+    <div class="nav-bottom">
+        <div class="nav-item" onclick="adminLogout()" style="color: var(--red);">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </div>
+    </div>
+</nav>
+
+<!-- ─── Main ────────────────────────────────────────────────────── -->
+<main id="main">
+
+    <!-- ══ DASHBOARD ══ -->
+    <section class="page active" id="page-dashboard">
+        <div class="page-header">
+            <div>
+                <div class="page-title">Dashboard</div>
+                <div class="page-subtitle">Welcome back, Admin. Here's what's happening.</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card gold">
+                <div class="stat-icon gold"><i class="fa-solid fa-users"></i></div>
+                <div class="stat-value" id="stat-total-users">0</div>
+                <div class="stat-label">TOTAL USERS</div>
+            </div>
+            <div class="stat-card green">
+                <div class="stat-icon green"><i class="fa-solid fa-circle-question"></i></div>
+                <div class="stat-value" id="stat-total-questions">0</div>
+                <div class="stat-label">QUESTIONS</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-icon blue"><i class="fa-solid fa-clipboard-check"></i></div>
+                <div class="stat-value" id="stat-total-tests">0</div>
+                <div class="stat-label">TESTS TAKEN</div>
+            </div>
+            <div class="stat-card red">
+                <div class="stat-icon red"><i class="fa-solid fa-star"></i></div>
+                <div class="stat-value" id="stat-avg-score">0</div>
+                <div class="stat-label">AVG SCORE</div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="table-card">
+            <div class="table-card-header">
+                <span class="table-card-title">Recent Test Submissions</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Score</th>
+                        <th>Progress</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="recent-tests-tbody">
+                    <tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-inbox"></i><p>No tests submitted yet</p></div></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══ QUESTIONS ══ -->
+    <section class="page" id="page-questions">
+        <div class="page-header">
+            <div>
+                <div class="page-title">Questions</div>
+                <div class="page-subtitle">Manage your quiz question bank</div>
+            </div>
+            <button class="btn btn-primary" onclick="openAddModal()">
+                <i class="fa-solid fa-plus"></i> Add Question
+            </button>
+        </div>
+
+        <div class="table-card">
+            <div class="table-card-header">
+                <span class="table-card-title">All Questions</span>
+                <div class="table-search">
+                    <input type="text" class="search-input" placeholder="&#xf002;  Search questions..." id="q-search" oninput="filterQuestions()">
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Question</th>
+                        <th>Correct Answer</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="questions-tbody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══ USERS ══ -->
+    <section class="page" id="page-users">
+        <div class="page-header">
+            <div>
+                <div class="page-title">Users</div>
+                <div class="page-subtitle">Registered user accounts</div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-card-header">
+                <span class="table-card-title">All Users</span>
+                <div class="table-search">
+                    <input type="text" class="search-input" placeholder="&#xf002;  Search users..." id="u-search" oninput="filterUsers()">
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Tests Taken</th>
+                        <th>Best Score</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-tbody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══ RESULTS ══ -->
+    <section class="page" id="page-results">
+        <div class="page-header">
+            <div>
+                <div class="page-title">Test Results</div>
+                <div class="page-subtitle">All quiz submissions and scores</div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-card-header">
+                <span class="table-card-title">All Results</span>
+                <div class="table-search">
+                    <input type="text" class="search-input" placeholder="&#xf002;  Search by name or email..." id="r-search" oninput="filterResults()">
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>User</th>
+                        <th>Score</th>
+                        <th>Time Spent</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="results-tbody"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ══ LEADERBOARD ══ -->
+    <section class="page" id="page-leaderboard">
+        <div class="page-header">
+            <div>
+                <div class="page-title">Leaderboard</div>
+                <div class="page-subtitle">Top performers ranked by highest score</div>
+            </div>
+        </div>
+
+        <div class="podium" id="podium-section">
+            <div class="empty-state" style="width:100%;"><i class="fa-solid fa-trophy"></i><p>No results yet</p></div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-card-header">
+                <span class="table-card-title">Full Rankings</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>User</th>
+                        <th>Score</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-tbody"></tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<!-- ─── ADD / EDIT QUESTION MODAL ───────────────────────────────── -->
+<div class="modal-overlay" id="question-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title" id="modal-title">Add Question</span>
+            <button class="modal-close" onclick="closeModal('question-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <input type="hidden" id="edit-index" value="-1">
+
+        <div class="form-group">
+            <label class="form-label">Question <span>*</span></label>
+            <textarea class="form-control" id="q-text" rows="3" placeholder="Enter the question..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Answer Options <span>*</span></label>
+            <div class="options-grid">
+                <div>
+                    <label class="form-label">Option 1</label>
+                    <input type="text" class="form-control" id="opt-1" placeholder="Option 1">
+                </div>
+                <div>
+                    <label class="form-label">Option 2</label>
+                    <input type="text" class="form-control" id="opt-2" placeholder="Option 2">
+                </div>
+                <div>
+                    <label class="form-label">Option 3</label>
+                    <input type="text" class="form-control" id="opt-3" placeholder="Option 3">
+                </div>
+                <div>
+                    <label class="form-label">Option 4</label>
+                    <input type="text" class="form-control" id="opt-4" placeholder="Option 4">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Correct Answer <span>*</span></label>
+            <select class="form-control" id="correct-ans">
+                <option value="">— Select correct option —</option>
+                <option value="0">Option 1</option>
+                <option value="1">Option 2</option>
+                <option value="2">Option 3</option>
+                <option value="3">Option 4</option>
+            </select>
+        </div>
+
+        <div class="form-footer">
+            <button class="btn btn-danger" onclick="closeModal('question-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="saveQuestion()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- ─── VIEW QUESTION MODAL ──────────────────────────────────────── -->
+<div class="modal-overlay" id="view-question-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title">View Question</span>
+            <button class="modal-close" onclick="closeModal('view-question-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="view-question-content"></div>
+        <div class="form-footer">
+            <button class="btn btn-primary" onclick="closeModal('view-question-modal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ─── VIEW TEST RESULT MODAL ───────────────────────────────────── -->
+<div class="modal-overlay" id="view-result-modal">
+    <div class="modal" style="width:680px;">
+        <div class="modal-header">
+            <span class="modal-title">Test Result Detail</span>
+            <button class="modal-close" onclick="closeModal('view-result-modal')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="view-result-content"></div>
+        <div class="form-footer">
+            <button class="btn btn-primary" onclick="closeModal('view-result-modal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ─── CONFIRM DELETE MODAL ────────────────────────────────────── -->
+<div class="modal-overlay" id="confirm-modal">
+    <div class="modal" style="width:360px;text-align:center;padding:36px 28px;">
+        <div class="confirm-icon"><i class="fa-solid fa-trash"></i></div>
+        <div class="confirm-title">Delete Question?</div>
+        <div class="confirm-text">This action cannot be undone. The question will be permanently removed.</div>
+        <div class="confirm-btns">
+            <button class="btn btn-danger" onclick="confirmDelete()">Yes, Delete</button>
+            <button class="btn btn-success" onclick="closeModal('confirm-modal')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ─── TOAST ────────────────────────────────────────────────────── -->
+<div id="toast">
+    <i class="fa-solid fa-circle-check toast-icon"></i>
+    <span id="toast-msg">Saved successfully</span>
+</div>
+
+<script src="admin-script.js"></script>
+</body>
+</html>

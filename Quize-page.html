@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question & Answers page</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header>
+        <div id="quiz-app-header">
+            <div>
+                <img src="assets/images/techpaathshala-logo.svg" alt="techpaathshala-logo">
+            </div>
+            <div id="header-list">
+                <ul>
+                    <li>Hello</li>
+                    <li id="show-user-name"></li>
+                </ul>
+                <img src="assets/images/header-image.svg" alt="image" onclick="UsersLogOut()">
+            </div>
+        </div>
+        <div id="logout-container" class="logout-container">
+            <div>
+                <i class="fa-solid fa-sort-up"></i>
+                <p id="logedinuser-firstname"></p>
+                <p id="current-user-name"></p>
+                <p id="current-user-email"></p>
+                <button type="button" id="logOut-btn" onclick="logOut()">Log out</button>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section>
+            <div id="q-a-section">
+                <div>
+                    <div>
+                        <h2 id="countQuestions">Question <span id="countQue">1</span> of 10</h2>
+                        <h2 id="displayTime">00:00</h2>
+                    </div>
+                    <div id="progress-bar"><span id="progress-percentage"></span></div>
+                </div>
+                <div id="questions">
+                    <h3>
+                        <span id="countNum">1. </span>
+                        <span id="quizes"></span>
+                    </h3>
+                    <!--<p>Supporting Text</p>-->
+                </div>
+                <div id="second-ol-list">
+                    <ol>
+                        <li class="radio-buttons"><input type="radio" name="answer" id="option1"
+                                onclick="choosedAnswer(0)">
+                            <label for="option1" class="option">1.<span id="option-1"> option<span></label>
+                        </li>
+                        <li class="radio-buttons"><input type="radio" name="answer" id="option2"
+                                onclick="choosedAnswer(1)">
+                            <label for="option2" class="option">2.<span id="option-2">option</span></label>
+                        </li>
+                        <li class="radio-buttons"><input type="radio" name="answer" id="option3"
+                                onclick="choosedAnswer(2)">
+                            <label for="option3" class="option">3.<span id="option-3">option</span></label>
+                        </li>
+                        <li class="radio-buttons"><input type="radio" name="answer" id="option4"
+                                onclick="choosedAnswer(3)">
+                            <label for="option4" class="option">4.<span id="option-4">option</span></label>
+                        </li>
+                    </ol>
+                </div>
+                <div id="previos-and-next-button">
+                    <button type="button" id="previous-btn" onclick="goToPrevious()"><img
+                            src="assets/images/left-arrow.svg" alt="left-arrow" id="left-arrow">Previous</button>
+                    <button type="button" id="next-btn" onclick="goToNext()"> Next <img
+                            src="assets/images/right-arrow.svg" alt="right-arrow" id="right-arrow"></button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="assets/script.js"></script>
+    <script>
+        displayQuestion();
+        userName();
+        LoggedInUserFirstLetter()
+        startTime()
+    </script>
+</body>
+
+</html>
