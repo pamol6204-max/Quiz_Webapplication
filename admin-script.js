@@ -8,7 +8,7 @@
 ═══════════════════════════════════════════════════════════════ */
 
 // ─── Default admin credentials ───────────────────────────────
-const ADMIN_EMAIL    = "admin@quiz.com";
+const ADMIN_EMAIL    = "amol6204@gmail.com";
 const ADMIN_PASSWORD = "admin1234";
 
 // ─── Default questions (same as script.js) ───────────────────
