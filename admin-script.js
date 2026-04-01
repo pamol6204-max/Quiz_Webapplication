@@ -50,14 +50,14 @@ function buildLoginPage() {
     <div class="login-logo">Q</div>
     <div class="login-title">Admin Login</div>
     <div class="login-sub">Sign in to manage the quiz application</div>
-    <div class="login-err" id="login-err">Invalid credentials. Try admin@quiz.com / admin1234</div>
+    <div class=\"login-err\" id=\"login-err\">Invalid credentials. Please try again.</div>
     <div class="form-group">
       <label class="form-label">Email</label>
-      <input class="form-control" type="email" id="a-email" placeholder="admin@quiz.com" value="admin@quiz.com">
+      <input class=\"form-control\" type=\"email\" id=\"a-email\" placeholder=\"Enter admin email\">
     </div>
     <div class="form-group">
       <label class="form-label">Password</label>
-      <input class="form-control" type="password" id="a-pass" placeholder="••••••••" value="admin1234">
+      <input class=\"form-control\" type=\"password\" id=\"a-pass\" placeholder=\"Enter password\">
     </div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;" onclick="doAdminLogin()">
       <i class="fa-solid fa-right-to-bracket"></i> Sign In
