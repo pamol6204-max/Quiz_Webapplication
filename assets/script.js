@@ -568,5 +568,50 @@ function countTest() {
 
   localStorage.setItem("user", JSON.stringify(user));
 }
+// ── Suggest Question Feature ──────────────────────────────────
+function openSuggestForm() {
+  document.getElementById("suggest-form").style.display = "block";
+}
 
+function closeSuggestForm() {
+  document.getElementById("suggest-form").style.display = "none";
+}
+
+function submitSuggestion() {
+  const question = document.getElementById("sug-question").value.trim();
+  const opt1     = document.getElementById("sug-opt1").value.trim();
+  const opt2     = document.getElementById("sug-opt2").value.trim();
+  const opt3     = document.getElementById("sug-opt3").value.trim();
+  const opt4     = document.getElementById("sug-opt4").value.trim();
+  const answer   = document.getElementById("sug-answer").value.trim();
+
+  if (!question || !opt1 || !opt2 || !opt3 || !opt4 || !answer) {
+    alert("Please fill in all fields.");
+    return;
+  }
+  if (![opt1, opt2, opt3, opt4].includes(answer)) {
+    alert("Correct answer must exactly match one of the 4 options.");
+    return;
+  }
+
+  const user = JSON.parse(localStorage.getItem("userLogedIn"));
+  const suggestion = {
+    question: question,
+    options: [opt1, opt2, opt3, opt4],
+    answer: answer,
+    suggestedBy: user ? user.name : "Anonymous",
+    suggestedEmail: user ? user.email : "",
+    date: new Date().toDateString(),
+    status: "pending"
+  };
+
+  const suggestions = JSON.parse(localStorage.getItem("suggestedQuestions")) || [];
+  suggestions.push(suggestion);
+  localStorage.setItem("suggestedQuestions", JSON.stringify(suggestions));
+
+  alert("✅ Thank you! Your question has been submitted for admin review.");
+  closeSuggestForm();
+  ["sug-question","sug-opt1","sug-opt2","sug-opt3","sug-opt4","sug-answer"]
+    .forEach(id => document.getElementById(id).value = "");
+}
 
