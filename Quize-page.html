@@ -77,6 +77,32 @@
                             src="assets/images/left-arrow.svg" alt="left-arrow" id="left-arrow">Previous</button>
                     <button type="button" id="next-btn" onclick="goToNext()"> Next <img
                             src="assets/images/right-arrow.svg" alt="right-arrow" id="right-arrow"></button>
+                    <!-- Suggest a Question -->
+<div style="margin-top:18px; text-align:center;">
+    <button type="button" onclick="openSuggestForm()" 
+      style="background:transparent; color:#667eea; border:2px solid #667eea; 
+             padding:32px 25px; border-radius:20px; cursor:pointer; font-size:25px; font-weight:600;">
+        💡 Suggest a Question
+    </button>
+</div>
+
+<!-- Suggest Form (hidden by default) -->
+<div id="suggest-form" style="display:none; background:#f7f7fb; border:1px solid #ddd; 
+     padding:18px; border-radius:10px; margin-top:12px; text-align:left;">
+    <p style="font-weight:bold; margin-bottom:10px; color:#333;">📝 Submit a Question Suggestion</p>
+    <input id="sug-question" type="text" placeholder="Enter your question..." 
+           style="width:100%; padding:8px; margin-bottom:8px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box;">
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+        <input id="sug-opt1" type="text" placeholder="Option 1" style="flex:1; min-width:140px; padding:7px; border-radius:6px; border:1px solid #ccc;">
+        <input id="sug-opt2" type="text" placeholder="Option 2" style="flex:1; min-width:140px; padding:7px; border-radius:6px; border:1px solid #ccc;">
+        <input id="sug-opt3" type="text" placeholder="Option 3" style="flex:1; min-width:140px; padding:7px; border-radius:6px; border:1px solid #ccc;">
+        <input id="sug-opt4" type="text" placeholder="Option 4" style="flex:1; min-width:140px; padding:7px; border-radius:6px; border:1px solid #ccc;">
+    </div>
+    <input id="sug-answer" type="text" placeholder="Correct answer (must match one option exactly)" 
+           style="width:100%; padding:8px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box;">
+    <button onclick="submitSuggestion()" style="background:#667eea; color:white; border:none; padding:8px 18px; border-radius:6px; cursor:pointer; font-weight:600;">Submit</button>
+    <button onclick="closeSuggestForm()" style="background:#aaa; color:white; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; margin-left:8px;">Cancel</button>
+</div>
                 </div>
             </div>
         </section>
