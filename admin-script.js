@@ -130,6 +130,7 @@ function showPage(name) {
     case "users":       renderUsers();       break;
     case "results":     renderResults();     break;
     case "leaderboard": renderLeaderboard(); break;
+        case "suggestions": renderSuggestions(); break;
   }
 }
 
@@ -661,3 +662,68 @@ function formatTime(seconds) {
   // Render initial page
   renderDashboard();
 })();
+function renderSuggestions() {
+  const suggestions = JSON.parse(localStorage.getItem("suggestedQuestions")) || [];
+  const container = document.getElementById("suggestions-content");
+
+  if (suggestions.length === 0) {
+    container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-lightbulb"></i><p>No suggestions yet</p></div>`;
+    return;
+  }
+
+  let html = `<div class="table-card"><div class="table-card-header">
+    <span class="table-card-title">All Suggestions (${suggestions.length})</span></div>
+    <div class="view-table-wrap"><table style="width:100%;">
+    <thead><tr>
+      <th>#</th><th>Question</th><th>Options</th><th>Correct Answer</th>
+      <th>Suggested By</th><th>Date</th><th>Status</th><th>Action</th>
+    </tr></thead><tbody>`;
+
+  suggestions.forEach((s, i) => {
+    const statusColor = s.status === "approved" ? "#28a745" : s.status === "rejected" ? "#dc3545" : "#f0a500";
+    html += `<tr>
+      <td>${i + 1}</td>
+      <td>${esc(s.question)}</td>
+      <td style="font-size:12px;">${s.options.map(o => esc(o)).join("<br>")}</td>
+      <td><strong>${esc(s.answer)}</strong></td>
+      <td>${esc(s.suggestedBy)}<br><small>${esc(s.suggestedEmail)}</small></td>
+      <td style="font-size:12px;">${esc(s.date)}</td>
+      <td><span style="color:${statusColor};font-weight:600;">${s.status.toUpperCase()}</span></td>
+      <td>
+        ${s.status === "pending" ? `
+        <button onclick="approveSuggestion(${i})" style="background:#28a745;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;margin-bottom:4px;display:block;width:80px;">✔ Approve</button>
+        <button onclick="rejectSuggestion(${i})" style="background:#dc3545;color:white;border:none;padding:5px 10px;border-radius:5px;cursor:pointer;display:block;width:80px;">✘ Reject</button>
+        ` : `<span style="color:var(--muted);font-size:12px;">Done</span>`}
+      </td>
+    </tr>`;
+  });
+
+  html += `</tbody></table></div></div>`;
+  container.innerHTML = html;
+}
+
+function approveSuggestion(i) {
+  const suggestions = JSON.parse(localStorage.getItem("suggestedQuestions")) || [];
+  if (suggestions[i].status !== "pending") return;
+  suggestions[i].status = "approved";
+  localStorage.setItem("suggestedQuestions", JSON.stringify(suggestions));
+
+  const questions = JSON.parse(localStorage.getItem("Quizes")) || [];
+  questions.push({
+    question: suggestions[i].question,
+    options: suggestions[i].options,
+    answer: suggestions[i].answer
+  });
+  localStorage.setItem("Quizes", JSON.stringify(questions));
+
+  alert("✅ Question approved and added to the quiz bank!");
+  renderSuggestions();
+}
+
+function rejectSuggestion(i) {
+  const suggestions = JSON.parse(localStorage.getItem("suggestedQuestions")) || [];
+  if (suggestions[i].status !== "pending") return;
+  suggestions[i].status = "rejected";
+  localStorage.setItem("suggestedQuestions", JSON.stringify(suggestions));
+  renderSuggestions();
+}
